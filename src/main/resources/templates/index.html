@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+
+        <!--  Зависимости Bootstrap-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link th:href = "@{/css/bootstrap.min.css}" rel="stylesheet">
+        <script th:src="@{/js/code.jquery.com_jquery-3.7.0.min.js}"></script>
+        <script th:src="@{/js/bootstrap.min.js}"></script>
+
+        <title>Работа мечты!</title>
+    </head>
+    <body>
+        <div class="container-fluid p-0">
+            <header th:insert="blocks/header :: header"></header>
+            <div class="container mt-2">
+                <h3>Проект job4j_todo с пулом заданий</h3>
+                <ul>
+                    <li><a th:href="active">Главная</a></li>
+                    <li><a th:href="@{/takes}">Задания</a></li>
+                    <li><a th:href="@{/takes/create}">Создать задание</a></li>
+                    <li><a th:href="@{/takes/new}">Новые задания</a></li>
+                    <li><a th:href="@{/takes/done}">Завершенные задания</a></li>
+                </ul>
+            </div>
+            <footer th:insert="blocks/footer :: footer"></footer>
+        </div>
+    </body>
+</html>
