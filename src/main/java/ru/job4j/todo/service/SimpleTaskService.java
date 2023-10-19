@@ -8,7 +8,6 @@ import ru.job4j.todo.persistence.TaskStore;
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
 @AllArgsConstructor
 public class SimpleTaskService implements TaskService {
 
