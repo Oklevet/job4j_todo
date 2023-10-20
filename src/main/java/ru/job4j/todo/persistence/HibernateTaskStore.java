@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-public class TaskServiceHibernate implements TaskService {
+public class HibernateTaskStore implements TaskStore {
 
     private final SessionFactory sf;
 

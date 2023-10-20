@@ -1,6 +1,9 @@
 package ru.job4j.todo.service;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.persistence.TaskStore;
@@ -9,6 +12,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 @AllArgsConstructor
+@NoArgsConstructor
+@Service
 public class SimpleTaskService implements TaskService {
 
     private TaskStore taskStore;
