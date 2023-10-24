@@ -35,8 +35,10 @@ public class TaskController {
     @PostMapping("/create")
     public String create(@ModelAttribute Task task, Model model) {
         try {
+            System.out.println("before save");
             taskService.save(task);
-            return "redirect:/tasks";
+            System.out.println("after save");
+            return "redirect:/tasks/all";
         } catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());
             return "errors/404";
@@ -45,6 +47,7 @@ public class TaskController {
 
     @GetMapping("/create")
     public String getCreationPage(Model model) {
+        System.out.println("getCreationPage");
         return "tasks/create";
     }
 

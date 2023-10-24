@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
-import ru.job4j.todo.service.TaskService;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,14 +15,15 @@ import java.util.Optional;
 public class HibernateTaskStore implements TaskStore {
 
     private final SessionFactory sf;
-
     @Override
     public Task save(Task task) {
         Session session = sf.openSession();
         try (session) {
             session.beginTransaction();
+            System.out.println("before insert");
             session.save(task);
             session.getTransaction().commit();
+            System.out.println("after insert");
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
@@ -38,8 +38,8 @@ public class HibernateTaskStore implements TaskStore {
         boolean result = false;
         try (session) {
             session.beginTransaction();
-            var q = session.createQuery("delete tasks as t where t.id = :id")
-                            .setParameter("^id", id)
+            var q = session.createQuery("delete Task as t where t.id = :id")
+                            .setParameter("id", id)
                             .executeUpdate();
             session.getTransaction().commit();
             result = true;
@@ -74,7 +74,7 @@ public class HibernateTaskStore implements TaskStore {
         boolean result = false;
         try {
             session.beginTransaction();
-            session.createQuery("update x.done = true from user x where id = :id", Task.class)
+            session.createQuery("update x.done = true from Task x where id = :id", Task.class)
                             .setParameter("id", task.getId()).executeUpdate();
             session.getTransaction().commit();
             result = true;
@@ -106,9 +106,13 @@ public class HibernateTaskStore implements TaskStore {
     public Collection<Task> findAll() {
         Session session = sf.openSession();
         List<Task> result = List.of();
+        System.out.println("in find all");
         try {
             session.beginTransaction();
-            result = session.createQuery("from user", Task.class).list();
+            System.out.println("before find all");
+            result = session.createQuery("from Task", Task.class).list();
+
+            System.out.println("after find all result = " + result.size());
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -124,7 +128,7 @@ public class HibernateTaskStore implements TaskStore {
         List<Task> result = List.of();
         try {
             session.beginTransaction();
-            result = session.createQuery("from user x where x.done = false", Task.class).list();
+            result = session.createQuery("from Task x where x.done = false", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -140,7 +144,7 @@ public class HibernateTaskStore implements TaskStore {
         List<Task> result = List.of();
         try {
             session.beginTransaction();
-            result = session.createQuery("from user x where x.done = true", Task.class).list();
+            result = session.createQuery("from Task x where x.done = true", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();

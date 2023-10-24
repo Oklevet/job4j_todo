@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Service
 public class SimpleTaskService implements TaskService {
 

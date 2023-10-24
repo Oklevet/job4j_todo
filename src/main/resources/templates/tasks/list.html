@@ -20,7 +20,7 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th><i class="bi bi-square"></i></th>
+                            <th><i class="bi bi-body-text"></i></th>
                             <th scope="col">Наименование </th>
                             <th scope="col">Дата создания</th>
                             <th scope="col">Состояние</th>
@@ -28,15 +28,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="task: ${tasks}">
-                            <td>
-                                <span th:if="${task.visible}">
-                                    <i class="bi bi-check-square"></i>
-                                </span>
-                                <span th:if="${!task.visible}">
-                                    <i class="bi bi-square"></i>
-                                </span>
-                            </td>
-                            <td><a th:text="${task.description}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
+                            <td><a th:text="${task.description}"></a></td>
                             <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"></td>
                             <td th:text="${task.done}"></td>
                         </tr>
