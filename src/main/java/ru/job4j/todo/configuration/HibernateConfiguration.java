@@ -16,5 +16,4 @@ public class HibernateConfiguration {
                 .configure().build();
         return new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
-
 }
