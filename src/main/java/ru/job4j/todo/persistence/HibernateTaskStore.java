@@ -15,6 +15,7 @@ import java.util.Optional;
 public class HibernateTaskStore implements TaskStore {
 
     private final SessionFactory sf;
+
     @Override
     public Task save(Task task) {
         Session session = sf.openSession();
