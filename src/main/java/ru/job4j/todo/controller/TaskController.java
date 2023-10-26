@@ -1,6 +1,7 @@
 package ru.job4j.todo.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +11,13 @@ import ru.job4j.todo.service.TaskService;
 
 @Controller
 @RequestMapping("/tasks")
-@AllArgsConstructor
 public class TaskController {
     private final TaskService taskService;
+
+    @Autowired
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("/all")
     public String getAll(Model model) {
@@ -85,5 +90,25 @@ public class TaskController {
             return "errors/404";
         }
         return "redirect:/tasks";
+    }
+
+    @PostMapping("/getDone/{id}")
+    public String getDone(Model model, @ModelAttribute Task task) {
+        boolean isUpdated = taskService.getDone(task);
+        if (!isUpdated) {
+            model.addAttribute("message", "Ошибка при обновлении задачи");
+            return "errors/404";
+        }
+        return "redirect:/tasks/all";
+    }
+
+    @PostMapping("/unDone/{id}")
+    public String unDone(Model model, @ModelAttribute Task task) {
+        boolean isUpdated = taskService.unDone(task);
+        if (!isUpdated) {
+            model.addAttribute("message", "Ошибка при обновлении задачи");
+            return "errors/404";
+        }
+        return "redirect:/tasks/all";
     }
 }

@@ -14,24 +14,26 @@
     </head>
     <body>
         <div class="container-fluid p-0">
-            <header th:insert="blocks/header :: header"></header>
+            <header class="header sticky sticky--top js-header" th:insert="blocks/header :: header"></header>
             <div class="container">
                 <div class="row">
-                    <table class="table">
+                    <table class="table" border="1px" style="margin: 0px auto;">
                         <thead>
-                        <tr>
-                            <th><i class="bi bi-body-text"></i></th>
-                            <th scope="col">Наименование </th>
-                            <th scope="col">Дата создания</th>
-                            <th scope="col">Состояние</th>
-                        </tr>
+                            <tr>
+                                <th scope="col">Наименование </th>
+                                <th scope="col">Дата создания</th>
+                                <th scope="col">Состояние</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="task: ${tasks}">
-                            <td><a th:text="${task.description}"></a></td>
-                            <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"></td>
-                            <td th:text="${task.done}"></td>
-                        </tr>
+                            <tr th:each="task: ${tasks}">
+                                <td><a th:text="${task.description}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
+                                <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"></td>
+                                <td th:switch="${task.done}">
+                                    <p th:case ="true">Выполнено</p>
+                                    <p th:case ="false">В работе</p>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

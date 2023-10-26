@@ -33,6 +33,11 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
+    public boolean unDone(Task task) {
+        return taskStore.getDone(task);
+    }
+
+    @Override
     public boolean update(Task task) {
         return taskStore.update(task);
     }

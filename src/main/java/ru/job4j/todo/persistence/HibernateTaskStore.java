@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +89,24 @@ public class HibernateTaskStore implements TaskStore {
     }
 
     @Override
+    public boolean unDone(Task task) {
+        Session session = sf.openSession();
+        boolean result = false;
+        try {
+            session.beginTransaction();
+            session.createQuery("update x.done = false from Task x where id = :id", Task.class)
+                    .setParameter("id", task.getId()).executeUpdate();
+            session.getTransaction().commit();
+            result = true;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+    @Override
     public Optional<Task> findById(int id) {
         Session session = sf.openSession();
         Optional<Task> result = Optional.empty();
@@ -116,7 +135,10 @@ public class HibernateTaskStore implements TaskStore {
             System.out.println("after find all result = " + result.size());
             session.getTransaction().commit();
         } catch (Exception e) {
+            //System.out.println(e.);
+            e.printStackTrace();
             session.getTransaction().rollback();
+
         } finally {
             session.close();
         }
