@@ -22,11 +22,10 @@ public class HibernateTaskStore implements TaskStore {
         Session session = sf.openSession();
         try (session) {
             session.beginTransaction();
-            System.out.println("before insert");
             session.save(task);
             session.getTransaction().commit();
-            System.out.println("after insert");
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -46,6 +45,7 @@ public class HibernateTaskStore implements TaskStore {
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -63,6 +63,7 @@ public class HibernateTaskStore implements TaskStore {
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -81,6 +82,7 @@ public class HibernateTaskStore implements TaskStore {
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -99,6 +101,7 @@ public class HibernateTaskStore implements TaskStore {
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -115,6 +118,7 @@ public class HibernateTaskStore implements TaskStore {
             result = Optional.ofNullable(session.get(Task.class, id));
             session.getTransaction().commit();
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -129,16 +133,11 @@ public class HibernateTaskStore implements TaskStore {
         System.out.println("in find all");
         try {
             session.beginTransaction();
-            System.out.println("before find all");
             result = session.createQuery("from Task", Task.class).list();
-
-            System.out.println("after find all result = " + result.size());
             session.getTransaction().commit();
         } catch (Exception e) {
-            //System.out.println(e.);
             e.printStackTrace();
             session.getTransaction().rollback();
-
         } finally {
             session.close();
         }
@@ -154,6 +153,7 @@ public class HibernateTaskStore implements TaskStore {
             result = session.createQuery("from Task x where x.done = false", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
@@ -170,6 +170,7 @@ public class HibernateTaskStore implements TaskStore {
             result = session.createQuery("from Task x where x.done = true", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             session.close();
