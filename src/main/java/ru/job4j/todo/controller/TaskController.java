@@ -81,16 +81,11 @@ public class TaskController {
 
     @PostMapping("/getDone/{id}")
     public String getDone(Model model, @ModelAttribute Task task) {
-        try {
-            System.out.println("start get done");
-            boolean isUpdated = taskService.getDone(task, task.isDone());
-            System.out.println("after upd");
-            if (!isUpdated) {
-                model.addAttribute("message", "Ошибка при обновлении задачи");
-                return "errors/404";
-            }
-            System.out.println("redirect");
-        }catch (Exception e) { e.printStackTrace();}
+        boolean isUpdated = taskService.getDone(task, task.isDone());
+        if (!isUpdated) {
+            model.addAttribute("message", "Ошибка при обновлении задачи");
+            return "errors/404";
+        }
         return "redirect:/tasks/all";
     }
 }
