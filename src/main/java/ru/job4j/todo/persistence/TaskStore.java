@@ -15,15 +15,11 @@ public interface TaskStore {
 
     boolean update(Task task);
 
-    boolean getDone(Task task);
-
-    boolean unDone(Task task);
+    boolean getDone(Task task, boolean done);
 
     Optional<Task> findById(int id);
 
     Collection<Task> findAll();
 
-    Collection<Task> findAllNew();
-
-    Collection<Task> findAllDone();
+    Collection<Task> findAllDoneOrNew(boolean done);
 }

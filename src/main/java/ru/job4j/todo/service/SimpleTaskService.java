@@ -28,13 +28,8 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public boolean getDone(Task task) {
-        return taskStore.getDone(task);
-    }
-
-    @Override
-    public boolean unDone(Task task) {
-        return taskStore.getDone(task);
+    public boolean getDone(Task task, boolean done) {
+        return taskStore.getDone(task, done);
     }
 
     @Override
@@ -53,12 +48,7 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public Collection<Task> findAllNew() {
-        return taskStore.findAllNew();
-    }
-
-    @Override
-    public Collection<Task> findAllDone() {
-        return taskStore.findAllDone();
+    public Collection<Task> findAllDoneOrNew(boolean done) {
+        return taskStore.findAllDoneOrNew(done);
     }
 }

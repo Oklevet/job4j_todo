@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +26,6 @@ public class HibernateTaskStore implements TaskStore {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return task;
     }
@@ -47,8 +44,6 @@ public class HibernateTaskStore implements TaskStore {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return result;
     }
@@ -65,46 +60,30 @@ public class HibernateTaskStore implements TaskStore {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return result;
     }
 
     @Override
-    public boolean getDone(Task task) {
+    public boolean getDone(Task task, boolean done) {
         Session session = sf.openSession();
         boolean result = false;
-        try {
-            session.beginTransaction();
-            session.createQuery("update x.done = true from Task x where id = :id", Task.class)
-                            .setParameter("id", task.getId()).executeUpdate();
-            session.getTransaction().commit();
-            result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return result;
-    }
+        String sql;
 
-    @Override
-    public boolean unDone(Task task) {
-        Session session = sf.openSession();
-        boolean result = false;
-        try {
+        if (done) {
+            sql = "update x.done = false from Task x where id = :id";
+        } else {
+            sql = "update x.done = true from Task x where id = :id";
+        }
+
+        try (session) {
             session.beginTransaction();
-            session.createQuery("update x.done = false from Task x where id = :id", Task.class)
-                    .setParameter("id", task.getId()).executeUpdate();
+            session.createQuery(sql, Task.class).setParameter("id", task.getId()).executeUpdate();
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return result;
     }
@@ -113,15 +92,13 @@ public class HibernateTaskStore implements TaskStore {
     public Optional<Task> findById(int id) {
         Session session = sf.openSession();
         Optional<Task> result = Optional.empty();
-        try {
+        try (session) {
             session.beginTransaction();
             result = Optional.ofNullable(session.get(Task.class, id));
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return result;
     }
@@ -131,49 +108,36 @@ public class HibernateTaskStore implements TaskStore {
         Session session = sf.openSession();
         List<Task> result = List.of();
         System.out.println("in find all");
-        try {
+        try (session) {
             session.beginTransaction();
             result = session.createQuery("from Task", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return result;
     }
 
     @Override
-    public Collection<Task> findAllNew() {
+    public Collection<Task> findAllDoneOrNew(boolean done) {
         Session session = sf.openSession();
         List<Task> result = List.of();
-        try {
-            session.beginTransaction();
-            result = session.createQuery("from Task x where x.done = false", Task.class).list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return result;
-    }
+        String sql;
 
-    @Override
-    public Collection<Task> findAllDone() {
-        Session session = sf.openSession();
-        List<Task> result = List.of();
-        try {
+        if (done) {
+            sql = "from Task x where x.done = true";
+        } else {
+            sql = "from Task x where x.done = false";
+        }
+
+        try (session) {
             session.beginTransaction();
-            result = session.createQuery("from Task x where x.done = true", Task.class).list();
+            result = session.createQuery(sql, Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return result;
     }
