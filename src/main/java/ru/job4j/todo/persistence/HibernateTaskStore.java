@@ -68,17 +68,13 @@ public class HibernateTaskStore implements TaskStore {
     public boolean getDone(Task task, boolean done) {
         Session session = sf.openSession();
         boolean result = false;
-        String sql;
-
-        if (done) {
-            sql = "update x.done = false from Task x where id = :id";
-        } else {
-            sql = "update x.done = true from Task x where id = :id";
-        }
 
         try (session) {
             session.beginTransaction();
-            session.createQuery(sql, Task.class).setParameter("id", task.getId()).executeUpdate();
+            session.createQuery("update x.done = :done from Task x where id = :id", Task.class)
+                    .setParameter("id", task.getId())
+                    .setParameter("done", task.isDone())
+                    .executeUpdate();
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
@@ -123,17 +119,12 @@ public class HibernateTaskStore implements TaskStore {
     public Collection<Task> findAllDoneOrNew(boolean done) {
         Session session = sf.openSession();
         List<Task> result = List.of();
-        String sql;
-
-        if (done) {
-            sql = "from Task x where x.done = true";
-        } else {
-            sql = "from Task x where x.done = false";
-        }
 
         try (session) {
             session.beginTransaction();
-            result = session.createQuery(sql, Task.class).list();
+            result = session.createQuery("from Task x where x.done = :done", Task.class)
+                    .setParameter("done", done)
+                    .list();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
