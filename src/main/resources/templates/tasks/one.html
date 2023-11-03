@@ -33,16 +33,16 @@
                         <div class="col-6"></div>
                         <div class="col-6">
                             <div class="row">
-
+                                <br />
                                 <div class="btn-group">
-                                    <button class="btn btn-danger w-100" th:href="@{/tasks/getDone/{id}(id=${task.id})}">Выполнено</button>
+                                    <a class="btn btn-success w-100" th:href="@{/tasks/getDone/{id}(id=${task.id})}">Выполнено</a>
                                 </div>
 
                                 <br />
 
                                 <div class="btn-group">
-                                    <button class="btn btn-light w-200" th:href="@{/tasks}">Отмена</button>
-                                    <button class="btn btn-danger w-200" th:href="@{/tasks/delete/{id}(id=${task.id})}">Удалить</button>
+                                    <a class="btn btn-light w-200" th:href="@{/tasks/all}">Отмена</a>
+                                    <a class="btn btn-danger w-200" th:href="@{/tasks/delete/{id}(id=${task.id})}">Удалить</a>
                                     <button class="btn btn-success w-200" type="submit">Сохранить</button>
                                 </div>
                             </div>

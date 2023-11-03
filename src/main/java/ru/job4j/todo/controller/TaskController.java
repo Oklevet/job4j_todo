@@ -60,27 +60,30 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, @RequestParam MultipartFile file, Model model) {
+    public String update(@ModelAttribute Task task, Model model) {
+        System.out.println("update " + task.getId());
         var isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");
             return "errors/404";
         }
-        return "redirect:/tasks";
+        return "redirect:/tasks/all";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Model model, @PathVariable int id) {
+        System.out.println("delete " + id);
         var isDeleted = taskService.deleteById(id);
         if (!isDeleted) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");
             return "errors/404";
         }
-        return "redirect:/tasks";
+        return "redirect:/tasks/all";
     }
 
-    @PostMapping("/getDone/{id}")
+    @GetMapping("/getDone/{id}")
     public String getDone(Model model, @ModelAttribute Task task) {
+        System.out.println("getdone " + task.getId());
         boolean isUpdated = taskService.getDone(task, task.isDone());
         if (!isUpdated) {
             model.addAttribute("message", "Ошибка при обновлении задачи");

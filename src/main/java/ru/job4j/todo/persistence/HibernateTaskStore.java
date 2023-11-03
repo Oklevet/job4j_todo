@@ -68,18 +68,23 @@ public class HibernateTaskStore implements TaskStore {
     public boolean getDone(Task task, boolean done) {
         Session session = sf.openSession();
         boolean result = false;
-
-        try (session) {
+        task.setDone(!task.isDone());
+        try {
             session.beginTransaction();
-            session.createQuery("update x.done = :done from Task x where id = :id", Task.class)
+            System.out.println(".getDone bfr update");
+            session.createQuery("update Task set done = :done where id = :id")
                     .setParameter("id", task.getId())
                     .setParameter("done", task.isDone())
                     .executeUpdate();
+            System.out.println(".getDone aftr update");
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
+            System.out.println(".getDone exception");
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return result;
     }
@@ -88,7 +93,7 @@ public class HibernateTaskStore implements TaskStore {
     public Optional<Task> findById(int id) {
         Session session = sf.openSession();
         Optional<Task> result = Optional.empty();
-        try (session) {
+        try {
             session.beginTransaction();
             result = Optional.ofNullable(session.get(Task.class, id));
             session.getTransaction().commit();
@@ -103,7 +108,6 @@ public class HibernateTaskStore implements TaskStore {
     public Collection<Task> findAll() {
         Session session = sf.openSession();
         List<Task> result = List.of();
-        System.out.println("in find all");
         try (session) {
             session.beginTransaction();
             result = session.createQuery("from Task", Task.class).list();
@@ -123,7 +127,7 @@ public class HibernateTaskStore implements TaskStore {
         try (session) {
             session.beginTransaction();
             result = session.createQuery("from Task x where x.done = :done", Task.class)
-                    .setParameter("done", done)
+                    .setParameter("done", done ? "true" : "false")
                     .list();
             session.getTransaction().commit();
         } catch (Exception e) {
