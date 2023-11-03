@@ -9,4 +9,3 @@ insert into users ("name", login, password) values  ('Nikanor', 'qwe', 'qwe');
 
 select * from users;
 select * from tasks;
-update tasks set done = 'true' where id = 7

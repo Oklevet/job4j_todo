@@ -44,3 +44,7 @@ IntelliJ IDEA 2022.2.3
 
 Редактирование задачи:
 ![](data/images/UpdatePage.png)
+
+
+Изменение и отслеживание статусов задачи:
+![](data/images/TrackingChangingState.png)
