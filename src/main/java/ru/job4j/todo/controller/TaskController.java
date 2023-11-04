@@ -44,7 +44,6 @@ public class TaskController {
 
     @GetMapping("/create")
     public String getCreationPage(Model model) {
-        System.out.println("getCreationPage");
         return "tasks/create";
     }
 
@@ -61,7 +60,6 @@ public class TaskController {
 
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
-        System.out.println("update " + task.getId());
         var isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");
@@ -72,7 +70,6 @@ public class TaskController {
 
     @GetMapping("/delete/{id}")
     public String delete(Model model, @PathVariable int id) {
-        System.out.println("delete " + id);
         var isDeleted = taskService.deleteById(id);
         if (!isDeleted) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");
@@ -83,7 +80,6 @@ public class TaskController {
 
     @GetMapping("/getDone/{id}")
     public String getDone(Model model, @ModelAttribute Task task) {
-        System.out.println("getdone " + task.getId());
         boolean isUpdated = taskService.getDone(task, task.isDone());
         if (!isUpdated) {
             model.addAttribute("message", "Ошибка при обновлении задачи");

@@ -77,16 +77,13 @@ public class HibernateTaskStore implements TaskStore {
         task.setDone(!task.isDone());
         try {
             session.beginTransaction();
-            System.out.println(".getDone bfr update");
             session.createQuery("update Task set done = :done where id = :id")
                     .setParameter("id", task.getId())
                     .setParameter("done", task.isDone())
                     .executeUpdate();
-            System.out.println(".getDone aftr update");
             session.getTransaction().commit();
             result = true;
         } catch (Exception e) {
-            System.out.println(".getDone exception");
             e.printStackTrace();
             session.getTransaction().rollback();
         } finally {

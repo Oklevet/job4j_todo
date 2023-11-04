@@ -29,7 +29,7 @@ public class UserController {
         var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
             model.addAttribute("message", "Пользователь с таким логином уже существует");
-            return "errors/404";
+            return "users/register";
         }
         return "redirect:/tasks/all";
     }
@@ -42,16 +42,12 @@ public class UserController {
     @PostMapping("/login")
     public String loginUser(@ModelAttribute User user, Model model, HttpServletRequest request) {
         var userOptional = userService.findByLoginAndPassword(user.getLogin(), user.getPassword());
-        System.out.println(userOptional.isEmpty());
         if (userOptional.isEmpty()) {
-            System.out.println("in error");
             model.addAttribute("error", "Логин или пароль введены неверно");
             return "users/login";
         }
         var session = request.getSession();
-        System.out.println("get session");
         session.setAttribute("user", userOptional.get());
-        System.out.println("set attr");
         return "redirect:/tasks/all";
     }
 

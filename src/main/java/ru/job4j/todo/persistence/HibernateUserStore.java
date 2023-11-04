@@ -42,7 +42,7 @@ public class HibernateUserStore implements UserStore {
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
-            optionalUser = Optional.ofNullable(user);
+            optionalUser = Optional.of(user);
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
