@@ -15,7 +15,7 @@ public interface TaskStore {
 
     boolean update(Task task);
 
-    boolean getDone(Task task, boolean done);
+    boolean getDone(Task task);
 
     Optional<Task> findById(int id);
 

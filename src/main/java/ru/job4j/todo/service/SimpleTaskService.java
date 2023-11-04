@@ -28,8 +28,8 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public boolean getDone(Task task, boolean done) {
-        return taskStore.getDone(task, done);
+    public boolean getDone(Task task) {
+        return taskStore.getDone(task);
     }
 
     @Override

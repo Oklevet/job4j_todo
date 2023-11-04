@@ -77,10 +77,10 @@ public class TaskController {
         }
         return "redirect:/tasks/all";
     }
-
+ 
     @GetMapping("/getDone/{id}")
     public String getDone(Model model, @ModelAttribute Task task) {
-        boolean isUpdated = taskService.getDone(task, task.isDone());
+        boolean isUpdated = taskService.getDone(task);
         if (!isUpdated) {
             model.addAttribute("message", "Ошибка при обновлении задачи");
             return "errors/404";
