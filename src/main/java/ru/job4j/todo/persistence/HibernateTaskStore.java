@@ -11,7 +11,6 @@ import java.util.*;
 @AllArgsConstructor
 public class HibernateTaskStore implements TaskStore {
 
-
     private final CrudStore crudStore;
 
     @Override

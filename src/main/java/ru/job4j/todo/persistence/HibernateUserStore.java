@@ -13,7 +13,6 @@ import java.util.*;
 @AllArgsConstructor
 public class HibernateUserStore implements UserStore {
 
-
     private final CrudStore crudStore;
 
     @Override
