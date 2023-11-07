@@ -42,8 +42,8 @@ public class HibernateTaskStore implements TaskStore {
 
     @Override
     public Collection<Task> findAll(User user) {
-        return crudStore.query("from Task x where x.todo_user = :user_id", Task.class,
-                    Map.of("user_id", user.getId()));
+        return crudStore.query("from Task x where x.user = :user", Task.class,
+                    Map.of("user", user));
     }
 
     @Override
