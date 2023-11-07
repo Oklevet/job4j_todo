@@ -1,43 +1,47 @@
 package ru.job4j.todo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/tasks")
+@AllArgsConstructor
 public class TaskController {
     private final TaskService taskService;
 
-    @Autowired
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
-
     @GetMapping("/all")
-    public String getAll(Model model) {
-        model.addAttribute("tasks", taskService.findAll());
+    public String getAll(Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        model.addAttribute("tasks", taskService.findAll(user));
         return "tasks/list";
     }
 
     @GetMapping("/new")
-    public String getAllNew(Model model) {
-        model.addAttribute("tasks", taskService.findAllDoneOrNew(false));
+    public String getAllNew(Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        model.addAttribute("tasks", taskService.findAllDoneOrNew(user, false));
         return "tasks/list";
     }
 
     @GetMapping("/done")
-    public String getAllDone(Model model) {
-        model.addAttribute("tasks", taskService.findAllDoneOrNew(true));
+    public String getAllDone(Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        model.addAttribute("tasks", taskService.findAllDoneOrNew(user, true));
         return "tasks/list";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model) {
+    public String create(@ModelAttribute Task task, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        task.setUser(user);
         taskService.save(task);
         return "redirect:/tasks/all";
     }
@@ -77,7 +81,7 @@ public class TaskController {
         }
         return "redirect:/tasks/all";
     }
- 
+
     @GetMapping("/getDone/{id}")
     public String getDone(Model model, @ModelAttribute Task task) {
         boolean isUpdated = taskService.getDone(task);

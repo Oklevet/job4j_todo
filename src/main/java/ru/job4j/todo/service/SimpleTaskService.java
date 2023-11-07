@@ -1,18 +1,18 @@
 package ru.job4j.todo.service;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.persistence.TaskStore;
 
 import java.util.Collection;
 import java.util.Optional;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class SimpleTaskService implements TaskService {
 
     private TaskStore taskStore;
@@ -43,12 +43,12 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public Collection<Task> findAll() {
-        return taskStore.findAll();
+    public Collection<Task> findAll(User user) {
+        return taskStore.findAll(user);
     }
 
     @Override
-    public Collection<Task> findAllDoneOrNew(boolean done) {
-        return taskStore.findAllDoneOrNew(done);
+    public Collection<Task> findAllDoneOrNew(User user, boolean done) {
+        return taskStore.findAllDoneOrNew(user, done);
     }
 }

@@ -1,5 +1,6 @@
 package ru.job4j.todo.configuration;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@NoArgsConstructor
 public class HibernateConfiguration {
 
     @Bean(destroyMethod = "close")

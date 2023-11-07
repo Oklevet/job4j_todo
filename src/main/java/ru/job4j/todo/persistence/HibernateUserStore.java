@@ -12,59 +12,27 @@ import java.util.*;
 @Repository
 @AllArgsConstructor
 public class HibernateUserStore implements UserStore {
-
     private final CrudStore crudStore;
 
     @Override
     public Collection<User> findAll() {
-        try {
-            return crudStore.query("from User", User.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<User>();
+        return crudStore.query("from User", User.class);
     }
 
     @Override
     public Optional<User> save(User user) {
-        try {
-            crudStore.run(session -> session.save(user));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-        return Optional.of(user);
+        return crudStore.run(session -> session.save(user)) ? Optional.of(user) : Optional.empty();
     }
 
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
-        Map<String, Object> userAttrs = new HashMap<>();
-        userAttrs.put("login", login);
-        userAttrs.put("password", password);
-
-        try {
-            return crudStore.optional(
-                    "from User x where x.login = :login and x.password = :password", User.class, userAttrs);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+        return crudStore.optional("from User x where x.login = :login and x.password = :password", User.class,
+                Map.of("login", login, "password", password));
     }
 
     @Override
     public boolean deleteByLoginAndPassword(String login, String password) {
-        Map<String, Object> userAttrs = new HashMap<>();
-        userAttrs.put("login", login);
-        userAttrs.put("password", password);
-        boolean result = true;
-
-        try {
-            crudStore.run(
-                    "delete User x where x.login = :login and x.password = :password", userAttrs);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = false;
-        }
-        return result;
+        return crudStore.run("delete User x where x.login = :login and x.password = :password",
+                    Map.of("login", login, "password", password));
     }
 }

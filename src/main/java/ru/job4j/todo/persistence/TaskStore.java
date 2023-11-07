@@ -1,8 +1,7 @@
 package ru.job4j.todo.persistence;
 
-import lombok.AllArgsConstructor;
-import org.hibernate.SessionFactory;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -19,7 +18,7 @@ public interface TaskStore {
 
     Optional<Task> findById(int id);
 
-    Collection<Task> findAll();
+    Collection<Task> findAll(User user);
 
-    Collection<Task> findAllDoneOrNew(boolean done);
+    Collection<Task> findAllDoneOrNew(User user, boolean done);
 }

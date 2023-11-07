@@ -25,10 +25,6 @@ public class SessionFilter extends HttpFilter {
 
     private void addUserToSession(HttpSession session, HttpServletRequest request) {
         User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setLogin("Гость");
-        }
         request.setAttribute("user", user);
     }
 }

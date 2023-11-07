@@ -10,99 +10,45 @@ import java.util.*;
 @Repository
 @AllArgsConstructor
 public class HibernateTaskStore implements TaskStore {
-
     private final CrudStore crudStore;
 
     @Override
     public Task save(Task task) {
-        try {
-            crudStore.run(session -> session.save(task));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return task;
+        return crudStore.run(session -> session.save(task)) ? task : null;
     }
 
     @Override
     public boolean deleteById(int id) {
-        Map<String, Object> taskAttrs = new HashMap<>();
-        taskAttrs.put("id", id);
-        boolean result = true;
-
-        try {
-            crudStore.run(
-                    "delete Task as t where t.id = :id", taskAttrs);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = false;
-        }
-        return result;
+        return crudStore.run(
+                    "delete Task as t where t.id = :id", Map.of("id", id));
     }
 
     @Override
     public boolean update(Task task) {
-        boolean result = true;
-        try {
-            crudStore.run(session -> session.merge(task));
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = false;
-        }
-        return result;
+        return crudStore.run(session -> session.merge(task));
     }
 
     @Override
     public boolean getDone(Task task) {
-        Map<String, Object> taskAttrs = new HashMap<>();
-        taskAttrs.put("id", task.getId());
-        taskAttrs.put("done", !task.isDone());
-        boolean result = true;
-
-        try {
-            crudStore.run(
-                    "update Task set done = :done where id = :id", taskAttrs);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            result = false;
-        }
-        return result;
+        return crudStore.run(
+                    "update Task set done = :done where id = :id",
+                Map.of("id", task.getId(), "done", !task.isDone()));
     }
 
     @Override
     public Optional<Task> findById(int id) {
-        Map<String, Object> taskAttrs = new HashMap<>();
-        taskAttrs.put("id", id);
-
-        try {
-            return crudStore.optional(
-                    "from Task x where x.id = :id", Task.class, taskAttrs);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+        return crudStore.optional("from Task x where x.id = :id", Task.class, Map.of("id", id));
     }
 
     @Override
-    public Collection<Task> findAll() {
-        try {
-            return crudStore.query("from Task", Task.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<Task>();
+    public Collection<Task> findAll(User user) {
+        return crudStore.query("from Task x where x.todo_user = :user_id", Task.class,
+                    Map.of("user_id", user.getId()));
     }
 
     @Override
-    public Collection<Task> findAllDoneOrNew(boolean done) {
-        Map<String, Object> taskAttrs = new HashMap<>();
-        taskAttrs.put("done", done);
-        try {
-            return crudStore.query("from Task x where x.done = :done", Task.class, taskAttrs);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<Task>();
+    public Collection<Task> findAllDoneOrNew(User user, boolean done) {
+        return crudStore.query("from Task x where x.todo_user = :user_id", Task.class,
+                Map.of("user_id", user.getId(), "done", done));
     }
 }

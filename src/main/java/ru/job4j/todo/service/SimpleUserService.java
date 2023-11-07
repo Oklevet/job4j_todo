@@ -1,6 +1,7 @@
 package ru.job4j.todo.service;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.persistence.UserStore;
