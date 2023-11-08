@@ -19,7 +19,9 @@ public class TaskController {
 
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
+        System.out.println("redirected to /all");
         model.addAttribute("tasks", taskService.findAll(user));
+        System.out.println("made list /all");
         return "tasks/list";
     }
 

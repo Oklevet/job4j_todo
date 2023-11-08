@@ -46,8 +46,11 @@ public class UserController {
             model.addAttribute("error", "Логин или пароль введены неверно");
             return "users/login";
         }
+        System.out.println("login get succes");
         var session = request.getSession();
+        System.out.println("set session");
         session.setAttribute("user", userOptional.get());
+        System.out.println("set attrs");
         return "redirect:/tasks/all";
     }
 

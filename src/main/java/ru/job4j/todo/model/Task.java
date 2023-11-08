@@ -28,6 +28,6 @@ public class Task {
     private boolean done;
 
     @ManyToOne
-    @JoinColumn(name = "todo_user")
+    @JoinColumn(name = "user_id")
     private User user;
 }
