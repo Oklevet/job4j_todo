@@ -18,29 +18,25 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/all")
-    public String getAll(Model model, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public String getAll(Model model, @SessionAttribute User user) {
         model.addAttribute("tasks", taskService.findAll(user));
         return "tasks/list";
     }
 
     @GetMapping("/new")
-    public String getAllNew(Model model, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public String getAllNew(Model model, @SessionAttribute User user) {
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, false));
         return "tasks/list";
     }
 
     @GetMapping("/done")
-    public String getAllDone(Model model, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public String getAllDone(Model model, @SessionAttribute User user) {
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, true));
         return "tasks/list";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model, HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
+    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
         task.setUser(user);
         taskService.save(task);
         return "redirect:/tasks/all";
@@ -63,7 +59,7 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, Model model) {
+    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
         var isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");
