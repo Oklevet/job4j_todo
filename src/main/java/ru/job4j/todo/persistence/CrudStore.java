@@ -81,7 +81,9 @@ public class CrudStore {
                 System.out.println(".CrudS in loop obj = " + arg.getValue());
             }
             System.out.println(".CrudS aft loop");
-            var s = sq.list();
+            var s = sq.getResultList();
+
+            System.out.println(".CrudS print made list");
             s.forEach(System.out::println);
             return s;
         };

@@ -43,7 +43,7 @@ public class HibernateTaskStore implements TaskStore {
     @Override
     public Collection<Task> findAll(User user) {
         System.out.println(".HST find all");
-        return crudStore.query("from Task x where x.user_id = :us_id", Task.class,
+        return crudStore.query("from Task x where x.user.id = :us_id", Task.class,
                     Map.of("us_id", user.getId()));
     }
 
