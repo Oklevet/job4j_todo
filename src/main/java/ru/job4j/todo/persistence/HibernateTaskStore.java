@@ -49,7 +49,7 @@ public class HibernateTaskStore implements TaskStore {
 
     @Override
     public Collection<Task> findAllDoneOrNew(User user, boolean done) {
-        return crudStore.query("from Task x where x.user_id = :us_id", Task.class,
+        return crudStore.query("from Task x where x.user.id = :us_id and x.done = :done", Task.class,
                 Map.of("us_id", user.getId(), "done", done));
     }
 }
