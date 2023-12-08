@@ -27,6 +27,17 @@
                                 <label for="description" class="form-label"><b>Описание</b></label>
                                 <textarea class="form-control" id="description" name="description" th:field="*{description}" rows="4" placeholder="Опишите задание"></textarea>
                             </div>
+                            <div id = "priorities">
+                                <label for="priorities" class="form-label"><b>Приоритет</b></label>
+                                <select class="form-control" id="priority" name="priorName">
+                                    <tr th:each="prior: ${priorities}">
+                                        <option>
+                                            <a th:text="${prior.name}" ></a>
+                                            <a th:selected="${priorName == prior.name}"></a>
+                                        </option>
+                                    </tr>
+                                </select>
+                            </div>
                         </div>
                     </div>
 

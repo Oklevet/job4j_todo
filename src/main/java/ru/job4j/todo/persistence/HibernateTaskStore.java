@@ -2,6 +2,7 @@ package ru.job4j.todo.persistence;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
@@ -42,14 +43,13 @@ public class HibernateTaskStore implements TaskStore {
 
     @Override
     public Collection<Task> findAll(User user) {
-        System.out.println(".HST find all");
         return crudStore.query("from Task x where x.user.id = :us_id", Task.class,
                     Map.of("us_id", user.getId()));
     }
 
     @Override
     public Collection<Task> findAllDoneOrNew(User user, boolean done) {
-        return crudStore.query("from Task x where x.user.id = :us_id and x.done = :done", Task.class,
+        return crudStore.query("from Task x where x.user.id = :us_id and x.done = :done", Task.class, //order by x.priority.position
                 Map.of("us_id", user.getId(), "done", done));
     }
 }

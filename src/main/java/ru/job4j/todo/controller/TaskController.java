@@ -5,8 +5,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
@@ -15,13 +17,14 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/tasks")
 @AllArgsConstructor
 public class TaskController {
+
     private final TaskService taskService;
+
+    private final PriorityService priorityService;
 
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
-        System.out.println("redirected to /all");
         model.addAttribute("tasks", taskService.findAll(user));
-        System.out.println("made list /all");
         return "tasks/list";
     }
 
@@ -38,14 +41,17 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
+    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user,
+                         @RequestParam(name = "priorName") String priorName) {
         task.setUser(user);
+        task.setPriority(priorityService.findByName(priorName).get());
         taskService.save(task);
         return "redirect:/tasks/all";
     }
 
     @GetMapping("/create")
     public String getCreationPage(Model model) {
+        model.addAttribute("priorities", priorityService.findAllPriors());
         return "tasks/create";
     }
 
@@ -57,11 +63,17 @@ public class TaskController {
             return "errors/404";
         }
         model.addAttribute("task", taskOptional.get());
+        model.addAttribute("priorities", priorityService.findAllPriors());
         return "tasks/one";
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
+    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user,
+                         @RequestParam(name = "priorName") String priorName) {
+        System.out.println("priorName = " + priorName);
+        task.setUser(user);
+        task.setPriority(priorityService.findByName(priorName).get());
+        System.out.println("id prior = " + priorityService.findByName(priorName).get());
         var isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");

@@ -1,5 +1,6 @@
 package ru.job4j.todo.persistence;
 
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
