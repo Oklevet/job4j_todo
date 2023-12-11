@@ -41,12 +41,15 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user,
-                         @RequestParam(name = "priorName") String priorName) {
-        task.setUser(user);
-        task.setPriority(priorityService.findByName(priorName).get());
-        taskService.save(task);
-        return "redirect:/tasks/all";
+    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
+        try {
+            task.setUser(user);
+            taskService.save(task);
+            return "redirect:/tasks/all";
+        } catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
+            return "errors/404";
+        }
     }
 
     @GetMapping("/create")
@@ -68,12 +71,8 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user,
-                         @RequestParam(name = "priorName") String priorName) {
-        System.out.println("priorName = " + priorName);
+    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
         task.setUser(user);
-        task.setPriority(priorityService.findByName(priorName).get());
-        System.out.println("id prior = " + priorityService.findByName(priorName).get());
         var isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");

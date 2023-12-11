@@ -10,5 +10,5 @@ public interface PriorityService {
 
     Collection<Priority> findAllPriors();
 
-    Optional<Priority> findByName(String name);
+    Optional<Priority> findById(int id);
 }

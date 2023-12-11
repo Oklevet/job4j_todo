@@ -20,7 +20,7 @@ public class SimplePriorityService implements PriorityService {
     }
 
     @Override
-    public Optional<Priority> findByName(String name) {
-        return priorityStore.findByName(name);
+    public Optional<Priority> findById(int id) {
+        return priorityStore.findById(id);
     }
 }

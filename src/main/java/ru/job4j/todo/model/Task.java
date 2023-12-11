@@ -36,16 +36,4 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "priority_id")
     private Priority priority;
-
-    public String getPriorName(Task task) {
-        if (task.priority == null) {
-            return "normal";
-        }
-        return task.priority.getName();
-    }
-
-    public void setPriorPos(Task task, String name) {
-        PriorityService priorityService = null;
-        task.setPriority(priorityService.findByName(name).get());
-    }
 }

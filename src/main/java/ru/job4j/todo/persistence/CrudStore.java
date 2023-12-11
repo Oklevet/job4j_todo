@@ -72,39 +72,27 @@ public class CrudStore {
     }
 
     public <T> List<T> query(String query, Class<T> cl, Map<String, Object> args) {
-        System.out.println(".CrudS find all");
         Function<Session, List<T>> command = session -> {
             var sq = session
                     .createQuery(query, cl);
             for (Map.Entry<String, Object> arg : args.entrySet()) {
                 sq.setParameter(arg.getKey(), arg.getValue());
-                System.out.println(".CrudS in loop obj = " + arg.getValue());
             }
-            System.out.println(".CrudS aft loop");
             var s = sq.getResultList();
-
-            System.out.println(".CrudS print made list");
-            s.forEach(System.out::println);
             return s;
         };
         return tx(command);
     }
 
     public <T> T tx(Function<Session, T> command) {
-        System.out.println(".CrudS start tx");
         Session session = sf.openSession();
-        System.out.println(".CrudS open session");
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            System.out.println(".CrudS began trans");
             T rsl = command.apply(session);
-            System.out.println(".CrudS applyed");
             transaction.commit();
-            System.out.println(".CrudS commited");
             return rsl;
         } catch (Exception e) {
-            System.out.println(".CrudS tx exception");
             if (transaction != null) {
                 transaction.rollback();
             }

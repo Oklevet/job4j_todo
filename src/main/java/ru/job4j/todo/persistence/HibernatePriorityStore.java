@@ -20,8 +20,8 @@ public class HibernatePriorityStore implements PriorityStore {
     }
 
     @Override
-    public Optional<Priority> findByName(String name) {
-        return crudStore.optional("from Priority x where x.name = :name", Priority.class,
-                Map.of("name", name));
+    public Optional<Priority> findById(int id) {
+        return crudStore.optional("from Priority x where x.id = :id", Priority.class,
+                Map.of("id", id));
     }
 }
