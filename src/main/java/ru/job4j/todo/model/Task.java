@@ -5,6 +5,7 @@ import ru.job4j.todo.service.PriorityService;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Entity
@@ -36,4 +37,12 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "priority_id")
     private Priority priority;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "task_categories",
+            joinColumns = { @JoinColumn(name = "tasks_id")},
+            inverseJoinColumns = { @JoinColumn(name = "categories_id")}
+    )
+    private List<Category> categories;
 }

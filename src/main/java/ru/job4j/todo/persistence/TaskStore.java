@@ -5,11 +5,12 @@ import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface TaskStore {
 
-    Task save(Task task);
+    Task save(Task task, List<Integer> categoriesId);
 
     boolean deleteById(int id);
 

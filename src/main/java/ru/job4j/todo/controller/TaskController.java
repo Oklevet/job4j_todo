@@ -1,17 +1,15 @@
 package ru.job4j.todo.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.todo.model.Priority;
-import ru.job4j.todo.model.Task;
-import ru.job4j.todo.model.User;
+import ru.job4j.todo.model.*;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/tasks")
@@ -22,9 +20,12 @@ public class TaskController {
 
     private final PriorityService priorityService;
 
+    private final CategoryService categoryService;
+
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
         model.addAttribute("tasks", taskService.findAll(user));
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/list";
     }
 
@@ -41,10 +42,15 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
+    public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user,
+                         @RequestParam int priorityId, @RequestParam(name = "categoriesId") List<Integer> categoriesId) {
         try {
             task.setUser(user);
-            taskService.save(task);
+            task.setPriority(priorityService.findById(priorityId).get());
+            taskService.save(task, categoriesId);
+
+//            Arrays.stream(categoriesId.split(","))
+//                    .forEach(x -> taskCategoryService.save(new TaskCategory(task.getId(), Integer.parseInt(x))));
             return "redirect:/tasks/all";
         } catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());
@@ -55,6 +61,7 @@ public class TaskController {
     @GetMapping("/create")
     public String getCreationPage(Model model) {
         model.addAttribute("priorities", priorityService.findAllPriors());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/create";
     }
 

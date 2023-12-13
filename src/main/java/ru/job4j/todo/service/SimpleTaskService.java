@@ -8,6 +8,7 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.persistence.TaskStore;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +18,8 @@ public class SimpleTaskService implements TaskService {
     private TaskStore taskStore;
 
     @Override
-    public Task save(Task task) {
-        return taskStore.save(task);
+    public Task save(Task task, List<Integer> categoriesId) {
+        return taskStore.save(task, categoriesId);
     }
 
     @Override

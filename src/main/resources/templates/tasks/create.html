@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/1999/xhtml">
     <head>
 
         <!--  Зависимости Bootstrap-->
@@ -30,6 +30,16 @@
                             <option th:each="priority: ${priorities}" th:text="${priority.name}" th:value="${priority.id}"></option>
                         </select>
                     </div>
+
+
+                    <div class="col-1"></div>
+                    <div class="mb-3 col-4">
+                        <label for="categoriesId"><b>Категории: </b></label>
+                        <select class="form-select" multiple="multiple" size="5" id="categoriesId" name="categoriesId" required>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                    </div>
+
                     <div class="mb-3 row">
                         <div class="col-6"></div>
                         <div class="col-6">

@@ -2,6 +2,7 @@ package ru.job4j.todo.persistence;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
@@ -14,7 +15,13 @@ public class HibernateTaskStore implements TaskStore {
     private final CrudStore crudStore;
 
     @Override
-    public Task save(Task task) {
+    public Task save(Task task, List<Integer> categoriesId) {
+        task.setCategories(new ArrayList<>());
+        categoriesId.stream().forEach(x -> {
+            Category category = new Category();
+            category.setId(x);
+            task.getCategories().add(category);
+        });
         return crudStore.run(session -> session.save(task)) ? task : null;
     }
 
@@ -43,15 +50,16 @@ public class HibernateTaskStore implements TaskStore {
 
     @Override
     public Collection<Task> findAll(User user) {
-        return crudStore.query("from Task x JOIN FETCH x.priority where x.user.id = :us_id "
-                        + "order by x.priority.position", Task.class,
+        return crudStore.query("from Task x JOIN FETCH x.priority "
+                        + " where x.user.id = :us_id"
+                        + " order by x.priority.position", Task.class,
                     Map.of("us_id", user.getId()));
     }
 
     @Override
     public Collection<Task> findAllDoneOrNew(User user, boolean done) {
-        return crudStore.query("from Task x JOIN FETCH x.priority where x.user.id = :us_id and x.done = :done "
-                        + "order by x.priority.position", Task.class,
+        return crudStore.query("from Task x JOIN FETCH x.priority "
+                        + "where x.user.id = :us_id and x.done = :done order by x.priority.position", Task.class,
                 Map.of("us_id", user.getId(), "done", done));
     }
 }

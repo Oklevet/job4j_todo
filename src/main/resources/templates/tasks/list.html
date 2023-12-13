@@ -25,6 +25,7 @@
                                 <th scope="col">Приоритет</th>
                                 <th scope="col">Дата создания</th>
                                 <th scope="col">Состояние</th>
+                                <th scope="col">Категории</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,9 +34,14 @@
                                 <td><a th:text="${task.description}" ></a></td>
                                 <td><a th:text="${task.priority.name}" ></a></td>
                                 <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}"></td>
+
                                 <td th:switch="${task.done}">
                                     <p th:case ="true">Выполнено</p>
                                     <p th:case ="false">В работе</p>
+                                </td>
+
+                                <td th:each="category: ${task.categories}">
+                                    <ts><a th:text="${category.name}" ></a></ts>
                                 </td>
                             </tr>
                         </tbody>
