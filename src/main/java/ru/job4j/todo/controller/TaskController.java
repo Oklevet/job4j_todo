@@ -43,14 +43,10 @@ public class TaskController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute Task task, Model model, @SessionAttribute User user,
-                         @RequestParam int priorityId, @RequestParam(name = "categoriesId") List<Integer> categoriesId) {
+                         @RequestParam(name = "categoriesId") List<Integer> categoriesId) {
         try {
             task.setUser(user);
-            task.setPriority(priorityService.findById(priorityId).get());
             taskService.save(task, categoriesId);
-
-//            Arrays.stream(categoriesId.split(","))
-//                    .forEach(x -> taskCategoryService.save(new TaskCategory(task.getId(), Integer.parseInt(x))));
             return "redirect:/tasks/all";
         } catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());
