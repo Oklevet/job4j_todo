@@ -14,7 +14,9 @@ public interface TaskService {
 
     boolean deleteById(int id);
 
-    boolean update(Task task);
+    boolean deleteCategoriesByTask(int id);
+
+    boolean update(Task task, List<Integer> categoriesId);
 
     boolean getDone(Task task);
 

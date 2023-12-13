@@ -70,13 +70,15 @@ public class TaskController {
         }
         model.addAttribute("task", taskOptional.get());
         model.addAttribute("priorities", priorityService.findAllPriors());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/one";
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user) {
+    public String update(@ModelAttribute Task task, Model model, @SessionAttribute User user,
+                         @RequestParam(name = "categoriesId") List<Integer> categoriesId) {
         task.setUser(user);
-        var isUpdated = taskService.update(task);
+        var isUpdated = taskService.update(task, categoriesId);
         if (!isUpdated) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдена");
             return "errors/404";
