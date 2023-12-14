@@ -9,8 +9,6 @@ public interface UserService {
 
     Collection<User> findAll();
 
-
-
     Optional<User> save(User user);
 
     Optional<User> findByLoginAndPassword(String login, String password);
