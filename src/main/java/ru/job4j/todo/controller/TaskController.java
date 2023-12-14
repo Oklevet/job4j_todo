@@ -9,6 +9,11 @@ import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -24,19 +29,37 @@ public class TaskController {
 
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
-        model.addAttribute("tasks", taskService.findAll(user));
+        Collection<Task> tasks = taskService.findAll(user);
+        tasks.forEach(task -> {
+            task.setCreated(task.getCreated()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.of(user.getTimezone())).toLocalDateTime());
+        });
+        model.addAttribute("tasks", tasks);
         model.addAttribute("categories", categoryService.findAll());
         return "tasks/list";
     }
 
     @GetMapping("/new")
     public String getAllNew(Model model, @SessionAttribute User user) {
+        Collection<Task> tasks = taskService.findAllDoneOrNew(user, false);
+        tasks.forEach(task -> {
+            task.setCreated(task.getCreated()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.of(user.getTimezone())).toLocalDateTime());
+        });
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, false));
         return "tasks/list";
     }
 
     @GetMapping("/done")
     public String getAllDone(Model model, @SessionAttribute User user) {
+        Collection<Task> tasks = taskService.findAllDoneOrNew(user, true);
+        tasks.forEach(task -> {
+            task.setCreated(task.getCreated()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.of(user.getTimezone())).toLocalDateTime());
+        });
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, true));
         return "tasks/list";
     }

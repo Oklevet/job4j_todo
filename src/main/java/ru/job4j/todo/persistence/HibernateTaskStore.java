@@ -34,7 +34,7 @@ public class HibernateTaskStore implements TaskStore {
     @Override
     public boolean deleteCategoriesByTask(int id) {
         return crudStore.run(
-                "delete TaskCategories as tc where tc.tasksId = :id", Map.of("id", id));
+                "delete from task_categories as tc where tc.tasks_id = :id", Map.of("id", id));
     }
 
     @Override

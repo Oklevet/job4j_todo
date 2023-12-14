@@ -26,6 +26,9 @@ public class User implements Serializable {
 
     private String password;
 
+    @Column(name = "user_zone")
+    private String timezone;
+
     public boolean isEmpty() {
         return login.isEmpty();
     }
