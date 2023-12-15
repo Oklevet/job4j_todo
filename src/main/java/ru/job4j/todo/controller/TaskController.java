@@ -8,11 +8,8 @@ import ru.job4j.todo.model.*;
 import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.utility.TimeZoneUtility;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,11 +27,7 @@ public class TaskController {
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
         Collection<Task> tasks = taskService.findAll(user);
-        tasks.forEach(task -> {
-            task.setCreated(task.getCreated()
-                    .atZone(ZoneId.of("UTC"))
-                    .withZoneSameInstant(ZoneId.of(user.getTimezone())).toLocalDateTime());
-        });
+        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
         model.addAttribute("tasks", tasks);
         model.addAttribute("categories", categoryService.findAll());
         return "tasks/list";
@@ -43,11 +36,7 @@ public class TaskController {
     @GetMapping("/new")
     public String getAllNew(Model model, @SessionAttribute User user) {
         Collection<Task> tasks = taskService.findAllDoneOrNew(user, false);
-        tasks.forEach(task -> {
-            task.setCreated(task.getCreated()
-                    .atZone(ZoneId.of("UTC"))
-                    .withZoneSameInstant(ZoneId.of(user.getTimezone())).toLocalDateTime());
-        });
+        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, false));
         return "tasks/list";
     }
@@ -55,11 +44,7 @@ public class TaskController {
     @GetMapping("/done")
     public String getAllDone(Model model, @SessionAttribute User user) {
         Collection<Task> tasks = taskService.findAllDoneOrNew(user, true);
-        tasks.forEach(task -> {
-            task.setCreated(task.getCreated()
-                    .atZone(ZoneId.of("UTC"))
-                    .withZoneSameInstant(ZoneId.of(user.getTimezone())).toLocalDateTime());
-        });
+        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, true));
         return "tasks/list";
     }

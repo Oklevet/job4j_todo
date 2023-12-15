@@ -35,10 +35,6 @@ public class UserController {
             model.addAttribute("message", "Пользователь с таким логином уже существует");
             return "users/register";
         }
-
-        if (Objects.equals(user.getTimezone(), "--Не выбрано")) {
-            user.setTimezone(TimeZone.getDefault().getID());
-        }
         return "redirect:/tasks/all";
     }
 
