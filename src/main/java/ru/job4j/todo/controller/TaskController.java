@@ -8,14 +8,9 @@ import ru.job4j.todo.model.*;
 import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
-import ru.job4j.todo.utility.TimeZoneUtility;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Controller
 @RequestMapping("/tasks")
 @AllArgsConstructor
