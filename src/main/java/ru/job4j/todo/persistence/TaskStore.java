@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface TaskStore {
 
-    Task save(Task task, List<Integer> categoriesId);
+    Task save(Task task);
 
     boolean deleteById(int id);
 
     boolean deleteCategoriesByTask(int id);
 
-    boolean update(Task task, List<Integer> categoriesId);
+    boolean update(Task task);
 
     boolean getDone(Task task);
 

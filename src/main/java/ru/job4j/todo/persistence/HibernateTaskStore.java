@@ -14,19 +14,12 @@ public class HibernateTaskStore implements TaskStore {
     private final CrudStore crudStore;
 
     @Override
-    public Task save(Task task, List<Integer> categoriesId) {
-        task.setCategories(new ArrayList<>());
-        categoriesId.stream().forEach(x -> {
-            Category category = new Category();
-            category.setId(x);
-            task.getCategories().add(category);
-        });
+    public Task save(Task task) {
         return crudStore.run(session -> session.save(task)) ? task : null;
     }
 
     @Override
     public boolean deleteById(int id) {
-        deleteCategoriesByTask(id);
         return crudStore.run(
                     "delete Task as t where t.id = :id", Map.of("id", id));
     }
@@ -38,13 +31,7 @@ public class HibernateTaskStore implements TaskStore {
     }
 
     @Override
-    public boolean update(Task task, List<Integer> categoriesId) {
-        task.setCategories(new ArrayList<>());
-        categoriesId.stream().forEach(x -> {
-            Category category = new Category();
-            category.setId(x);
-            task.getCategories().add(category);
-        });
+    public boolean update(Task task) {
         return crudStore.run(session -> session.merge(task));
     }
 

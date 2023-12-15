@@ -6,6 +6,8 @@ import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.persistence.TaskStore;
+import ru.job4j.todo.utility.CategoriesUtility;
+import ru.job4j.todo.utility.TimeZoneUtility;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +21,8 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public Task save(Task task, List<Integer> categoriesId) {
-        return taskStore.save(task, categoriesId);
+        CategoriesUtility.setCategoriesToTask(task, categoriesId);
+        return taskStore.save(task);
     }
 
     @Override
@@ -39,7 +42,8 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public boolean update(Task task, List<Integer> categoriesId) {
-        return taskStore.update(task, categoriesId);
+        CategoriesUtility.setCategoriesToTask(task, categoriesId);
+        return taskStore.update(task);
     }
 
     @Override
@@ -49,11 +53,15 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public Collection<Task> findAll(User user) {
-        return taskStore.findAll(user);
+        Collection<Task> tasks = taskStore.findAll(user);
+        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
+        return tasks;
     }
 
     @Override
     public Collection<Task> findAllDoneOrNew(User user, boolean done) {
-        return taskStore.findAllDoneOrNew(user, done);
+        Collection<Task> tasks = taskStore.findAllDoneOrNew(user, done);
+        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
+        return tasks;
     }
 }

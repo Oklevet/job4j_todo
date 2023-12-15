@@ -11,7 +11,10 @@ import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.utility.TimeZoneUtility;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tasks")
@@ -27,7 +30,6 @@ public class TaskController {
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
         Collection<Task> tasks = taskService.findAll(user);
-        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
         model.addAttribute("tasks", tasks);
         model.addAttribute("categories", categoryService.findAll());
         return "tasks/list";
@@ -36,7 +38,6 @@ public class TaskController {
     @GetMapping("/new")
     public String getAllNew(Model model, @SessionAttribute User user) {
         Collection<Task> tasks = taskService.findAllDoneOrNew(user, false);
-        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, false));
         return "tasks/list";
     }
@@ -44,7 +45,6 @@ public class TaskController {
     @GetMapping("/done")
     public String getAllDone(Model model, @SessionAttribute User user) {
         Collection<Task> tasks = taskService.findAllDoneOrNew(user, true);
-        TimeZoneUtility.changeToUsersTimeZone(tasks, user);
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, true));
         return "tasks/list";
     }
