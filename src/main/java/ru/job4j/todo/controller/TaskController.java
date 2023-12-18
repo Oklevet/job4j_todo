@@ -24,22 +24,18 @@ public class TaskController {
 
     @GetMapping("/all")
     public String getAll(Model model, @SessionAttribute User user) {
-        Collection<Task> tasks = taskService.findAll(user);
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("tasks", taskService.findAll(user));
         return "tasks/list";
     }
 
     @GetMapping("/new")
     public String getAllNew(Model model, @SessionAttribute User user) {
-        Collection<Task> tasks = taskService.findAllDoneOrNew(user, false);
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, false));
         return "tasks/list";
     }
 
     @GetMapping("/done")
     public String getAllDone(Model model, @SessionAttribute User user) {
-        Collection<Task> tasks = taskService.findAllDoneOrNew(user, true);
         model.addAttribute("tasks", taskService.findAllDoneOrNew(user, true));
         return "tasks/list";
     }

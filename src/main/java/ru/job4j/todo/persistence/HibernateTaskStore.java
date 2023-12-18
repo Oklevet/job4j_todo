@@ -49,7 +49,7 @@ public class HibernateTaskStore implements TaskStore {
 
     @Override
     public Collection<Task> findAll(User user) {
-        return crudStore.query("from Task x JOIN FETCH x.priority "
+        return crudStore.query("select distinct x from Task x JOIN FETCH x.priority JOIN FETCH x.categories "
                         + " where x.user.id = :us_id"
                         + " order by x.priority.position", Task.class,
                     Map.of("us_id", user.getId()));
@@ -57,7 +57,7 @@ public class HibernateTaskStore implements TaskStore {
 
     @Override
     public Collection<Task> findAllDoneOrNew(User user, boolean done) {
-        return crudStore.query("from Task x JOIN FETCH x.priority "
+        return crudStore.query("select distinct x from Task x JOIN FETCH x.priority JOIN FETCH x.categories "
                         + "where x.user.id = :us_id and x.done = :done order by x.priority.position", Task.class,
                 Map.of("us_id", user.getId(), "done", done));
     }
